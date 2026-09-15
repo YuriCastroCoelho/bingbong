@@ -32,4 +32,12 @@ class Pedido(models.Model):
     def __str__(self):
         return f"Pedido {self.id} - {self.nome_cliente}"
     
-        
+class Item(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    quantidade = models.IntegerField()
+    preco = models.DecimalField(max_digits=8, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.quantidade} x {self.produto.nome} (Pedido {self.pedido.id})"
+    
