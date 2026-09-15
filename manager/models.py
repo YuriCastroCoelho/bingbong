@@ -41,3 +41,11 @@ class Item(models.Model):
     def __str__(self):
         return f"{self.quantidade} x {self.produto.nome} (Pedido {self.pedido.id})"
     
+class Cupom(models.Model):
+    codigo = models.CharField(max_length=50, unique=True)
+    desconto = models.DecimalField(default = 5, max_digits=5, decimal_places=2)
+    validade = models.DateField()
+    utilizado = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.codigo
