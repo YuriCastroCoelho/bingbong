@@ -1,6 +1,12 @@
 from django.db import models
 
 # Create your models here.
+class Cliente(models.Model):
+    nome = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nome
+
 class Vendedor(models.Model):
     marca = models.CharField(max_length=100)
     contato = models.EmailField(max_length=200)
@@ -25,12 +31,14 @@ class Pedido(models.Model):
         ('caminho', 'A caminho'),
         ('entregue', 'Produto Entregue')
     ]
-    nome_cliente = models.CharField(max_length=100)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     data_hora = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='carrinho')
     
+    cupom = models.ForeignKey('Cupom', on_delete=models.SET_NULL, null=True, blank=True)
+    
     def __str__(self):
-        return f"Pedido {self.id} - {self.nome_cliente}"
+        return f"Pedido {self.id} - {self.cliente.nome}"
     
 class Item(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
