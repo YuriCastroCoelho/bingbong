@@ -16,4 +16,20 @@ class Produto(models.Model):
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.nome    
+        return self.nome
+    
+class Pedido(models.Model):
+    STATUS_CHOICES = [
+        ('carrinho', 'No Carrinho'),
+        ('pendente', 'Pagamento Pendente'),
+        ('caminho', 'A caminho'),
+        ('entregue', 'Produto Entregue')
+    ]
+    nome_cliente = models.CharField(max_length=100)
+    data_hora = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='carrinho')
+    
+    def __str__(self):
+        return f"Pedido {self.id} - {self.nome_cliente}"
+    
+        
