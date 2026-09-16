@@ -1,0 +1,15 @@
+<h1>Nossa Vitrine de Produtos</h1>
+
+<ul>
+    {% for produto in produtos %}
+        <li>
+            <strong>{{ produto.nome }}</strong><br>
+            Preço: R$ {{ produto.preco }}<br>
+            Categoria: {{ produto.categoria }}<br>
+            Estoque: {{ produto.estoque }} unidades disponíveis
+        </li>
+        <hr>
+    {% empty %}
+        <p>Estamos Sem nenhum produto no Momento!</p>
+    {% endfor %}
+</ul>
