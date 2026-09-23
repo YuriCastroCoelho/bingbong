@@ -1,0 +1,18 @@
+<h1>Seu Carrinho</h1>
+
+<p>Cliente: {{ pedido.cliente.nome }}</p>
+<p>Status: {{ pedido.status }}</p>
+
+<ul>
+    {% for item in itens %}
+        <li>
+            Produto: {{ item.produto.nome }}<br>
+            Quantidade: {{ item.quantidade }}<br>
+            Preço unitário: R$ {{ item.preco }}
+        </li>
+    {% empty %}
+        <p>Seu carrinho está vazio.</p>
+    {% endfor %}
+</ul>
+
+<p><strong>Total: R$ {{ total }}</strong></p>

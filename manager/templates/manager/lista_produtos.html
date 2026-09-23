@@ -7,6 +7,12 @@
             Preço: R$ {{ produto.preco }}<br>
             Categoria: {{ produto.categoria }}<br>
             Estoque: {{ produto.estoque }} unidades disponíveis
+            <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
+    {% csrf_token %}
+    Seu nome: <input type="text" name="cliente_username">
+    Quantidade: <input type="number" name="quantidade">
+    <button type="submit">Adicionar ao Carrinho</button>
+</form>
         </li>
         <hr>
     {% empty %}
