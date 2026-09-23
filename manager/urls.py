@@ -16,5 +16,10 @@ urlpatterns = [
         'carrinho/<int:pedido_id>/', 
         views.ver_carrinho, 
         name='ver_carrinho',
-    )
+    ),
+    path(
+        'carrinho/<int:pedido_id>/aplicar-cupom/',
+        views.aplicar_cupom, 
+        name='aplicar_cupom'
+    ),
 ]

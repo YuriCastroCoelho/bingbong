@@ -16,3 +16,7 @@
 </ul>
 
 <p><strong>Total: R$ {{ total }}</strong></p>
+
+<form action="{% url 'lista_produtos' %}" method="get">
+    <button type="submit">Voltar</button>
+</form>
