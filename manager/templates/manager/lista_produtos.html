@@ -1,21 +1,44 @@
-<h1>Nossa Vitrine de Produtos</h1>
+{% load static %}
+<link rel="stylesheet" href="{% static 'manager/css/estilo.css' %}">
 
-<ul>
-    {% for produto in produtos %}
-        <li>
-            <strong>{{ produto.nome }}</strong><br>
-            Preço: R$ {{ produto.preco }}<br>
-            Categoria: {{ produto.categoria }}<br>
-            Estoque: {{ produto.estoque }} unidades disponíveis
-            <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
-    {% csrf_token %}
-    Seu nome: <input type="text" name="cliente_username">
-    Quantidade: <input type="number" name="quantidade">
-    <button type="submit">Adicionar ao Carrinho</button>
-</form>
-        </li>
-        <hr>
-    {% empty %}
-        <p>Estamos Sem nenhum produto no Momento!</p>
-    {% endfor %}
-</ul>
+<div class="loja">
+  <div class="loja-header">
+    <h1>Produtos Megamente</h1>
+    <p>estoque atual</p>
+  </div>
+
+  <ul class="grid">
+      {% for produto in produtos %}
+          <li class="card">
+              <div class="card-top">
+                  <h2>{{ produto.nome }}</h2>
+                  <span class="badge">{{ produto.categoria }}</span>
+              </div>
+
+              <dl class="specs">
+                  <div>
+                      <dt>Preço</dt>
+                      <dd>R$ {{ produto.preco }}</dd>
+                  </div>
+                  <div>
+                      <dt>Estoque</dt>
+                      <dd>{{ produto.estoque }} un.</dd>
+                  </div>
+              </dl>
+
+              <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
+                  {% csrf_token %}
+                  <label>Nome
+                      <input type="text" name="cliente_username">
+                  </label>
+                  <label>Quantidade
+                      <input type="number" name="quantidade" min="1">
+                  </label>
+                  <button type="submit">Adicionar ao carrinho</button>
+              </form>
+          </li>
+      {% empty %}
+          <p class="empty">Estamos sem nenhum produto!</p>
+      {% endfor %}
+  </ul>
+</div>

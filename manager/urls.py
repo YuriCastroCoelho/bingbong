@@ -22,4 +22,24 @@ urlpatterns = [
         views.aplicar_cupom, 
         name='aplicar_cupom'
     ),
+    path(
+        'carrinho/<int:pedido_id>/finalizar/',
+        views.finalizar_pedido,
+        name='finalizar_pedido'
+    ),
+    path(
+        'carrinho/<int:pedido_id>/a-caminho/',
+        views.marcar_a_caminho,
+        name='marcar_a_caminho'
+    ),
+    path(
+        'carrinho/<int:pedido_id>/entregue/',
+        views.marcar_entregue,
+        name='marcar_entregue'
+    ),
+    path(
+        'carrinho/<int:pedido_id>/cancelar/',
+        views.cancelar_pedido,
+        name='cancelar_pedido'
+    ),
 ]

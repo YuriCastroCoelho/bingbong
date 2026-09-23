@@ -1,22 +1,75 @@
-<h1>Seu Carrinho</h1>
+{% load static %}
+<link rel="stylesheet" href="{% static 'manager/css/estilo.css' %}">
 
-<p>Cliente: {{ pedido.cliente.nome }}</p>
-<p>Status: {{ pedido.status }}</p>
+<div class="carrinho">
+    <div class="carrinho-header">
+        <h1>Carrinho</h1>
+        <p class="cliente">Cliente: {{ pedido.cliente.nome }}</p>
+        <span class="status">{{ pedido.get_status_display }}</span>
+    </div>
 
-<ul>
-    {% for item in itens %}
-        <li>
-            Produto: {{ item.produto.nome }}<br>
-            Quantidade: {{ item.quantidade }}<br>
-            Preço unitário: R$ {{ item.preco }}
-        </li>
-    {% empty %}
-        <p>Seu carrinho está vazio.</p>
-    {% endfor %}
-</ul>
+    {% if messages %}
+      <ul class="mensagens">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
-<p><strong>Total: R$ {{ total }}</strong></p>
+    <ul class="itens">
+        {% for item in itens %}
+            <li>
+                <span class="item-nome">{{ item.produto.nome }}</span>
+                <span class="item-detalhe">
+                    {{ item.quantidade }}x &middot; R$ {{ item.preco }}
+                </span>
+            </li>
+        {% empty %}
+            <p class="vazio">Seu carrinho está vazio.</p>
+        {% endfor %}
+    </ul>
 
-<form action="{% url 'lista_produtos' %}" method="get">
-    <button type="submit">Voltar</button>
-</form>
+    <div class="total">
+        <span>Total</span>
+        <strong>R$ {{ total }}</strong>
+    </div>
+
+    <form class="form-cupom" action="{% url 'aplicar_cupom' pedido.id %}" method="post">
+        {% csrf_token %}
+        <select name="codigo_cupom">
+            {% for cupom in cupons %}
+                <option value="{{ cupom.codigo }}">{{ cupom.codigo }} (R$ {{ cupom.desconto }})</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline">Aplicar cupom</button>
+    </form>
+
+    <div class="acoes">
+        {% if pedido.status == 'carrinho' %}
+            <form action="{% url 'finalizar_pedido' pedido.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Finalizar pedido</button>
+            </form>
+            <form action="{% url 'cancelar_pedido' pedido.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Cancelar pedido</button>
+            </form>
+        {% elif pedido.status == 'pendente' %}
+            <form action="{% url 'marcar_a_caminho' pedido.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Marcar como a caminho</button>
+            </form>
+        {% elif pedido.status == 'caminho' %}
+            <form action="{% url 'marcar_entregue' pedido.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Marcar como entregue</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="voltar">
+        <form action="{% url 'lista_produtos' %}" method="get">
+            <button type="submit">← Voltar</button>
+        </form>
+    </div>
+</div>
