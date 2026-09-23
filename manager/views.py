@@ -8,11 +8,20 @@ def lista_produtos(request):
     
     produtos = Produto.objects.all()
     
+    termo_achar = request.GET.get('q')
+    categoria_filtro = request.GET.get('categoria')
+
+    if termo_achar:
+        produtos = produtos.filter(nome__icontains=termo_achar)
+
+    if categoria_filtro:
+        produtos = produtos.filter(categoria=categoria_filtro)
+    
     
     return render(
-        request, 
-        'manager/lista_produtos.html',  
-        {'produtos': produtos}       
+        request,
+        'manager/lista_produtos.html',
+        {'produtos': produtos, 'termo_achar': termo_achar, 'categoria_filtro': categoria_filtro},
     )
     
 def ver_carrinho(request, pedido_id):

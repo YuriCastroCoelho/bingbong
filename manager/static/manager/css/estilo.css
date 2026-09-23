@@ -268,6 +268,44 @@ body {
   outline-offset: 1px;
 }
 
+/* Estilos para o form de busca / filtros na lista de produtos */
+.filters {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1rem 0 1.6rem;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--ink);
+  padding: 0.5rem 0.6rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+}
+
+.filters input { flex: 1 1 240px; min-width: 160px; }
+.filters select { width: 220px; }
+
+.filters button {
+  background: var(--accent);
+  color: #071019;
+  border: none;
+  padding: 0.55rem 0.8rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filters input:focus,
+.filters select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+/* Tentar suavizar aparência do select em navegadores WebKit */
+.filters select { -webkit-appearance: none; appearance: none; }
+
 .btn {
   border: none;
   font-family: 'IBM Plex Sans', sans-serif;
