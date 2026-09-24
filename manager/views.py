@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Produto , Cliente, Pedido, Item, Cupom
 from datetime import date
 from django.contrib import messages
+from .forms import ProdutoForm
 
 # Create your views here.
 def lista_produtos(request):
@@ -116,3 +117,13 @@ def cancelar_pedido(request, pedido_id):
 
     pedido.delete()
     return redirect('lista_produtos')
+
+def cadastrar_produto(request):
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_produtos')
+    else:
+        form = ProdutoForm()
+    return render(request, 'manager/cadastro_produto.html', {"form" : form})

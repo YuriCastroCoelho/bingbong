@@ -42,4 +42,9 @@ urlpatterns = [
         views.cancelar_pedido,
         name='cancelar_pedido'
     ),
+    path(
+        'produtos/cadastrar/', 
+        views.cadastrar_produto, 
+        name='cadastrar_produto'
+    ),
 ]
