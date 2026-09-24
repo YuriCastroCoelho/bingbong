@@ -15,7 +15,7 @@ class ProdutoForm(forms.ModelForm):
     
     def clean_estoque(self):
         valor = self.cleaned_data.get('estoque')
-        if valor < 0:
+        if valor <= 0:
             raise forms.ValidationError("Estoque Invalido Não pode ser negativo")
         return valor
     
