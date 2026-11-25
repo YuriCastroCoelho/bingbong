@@ -1,0 +1,8 @@
+<h1>Pedidos com produtos meus</h1>
+<table>
+  {% for i in itens %}
+  <tr><td><a href="{% url 'painel_pedido' i.pedido.id %}">#{{ i.pedido.id }}</a></td>
+      <td>{{ i.pedido.cliente.nome }}</td><td>{{ i.produto.nome }}</td>
+      <td>{{ i.quantidade }}</td><td>{{ i.pedido.get_status_display }}</td></tr>
+  {% empty %}<tr><td>Sem pedidos.</td></tr>{% endfor %}
+</table>

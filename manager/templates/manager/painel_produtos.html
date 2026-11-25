@@ -1,0 +1,8 @@
+<h1>Meus produtos</h1>
+<a href="{% url 'painel_novo_produto' %}">Novo produto</a>
+<table>
+  {% for p in produtos %}
+  <tr><td>{{ p.nome }}</td><td>R$ {{ p.preco }}</td><td>{{ p.estoque }} un.</td>
+      <td><a href="{% url 'painel_editar_produto' p.id %}">Editar</a></td></tr>
+  {% empty %}<tr><td>Nenhum produto.</td></tr>{% endfor %}
+</table>

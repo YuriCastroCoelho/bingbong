@@ -1,0 +1,3 @@
+<h1>Pedido #{{ pedido.id }} – {{ pedido.cliente.nome }}</h1>
+<p>{{ pedido.get_status_display }}</p>
+<ul>{% for i in itens %}<li>{{ i.quantidade }} x {{ i.produto.nome }} (R$ {{ i.preco }})</li>{% endfor %}</ul>

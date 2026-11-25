@@ -1,25 +1,26 @@
 from django.urls import path
 from . import views
+from . import views_painel
 
 urlpatterns = [
     path(
-        '',                
-        views.lista_produtos,       
-        name='lista_produtos'      
+        '',
+        views.lista_produtos,
+        name='lista_produtos'
     ),
     path(
         'produtos/<int:produto_id>/adicionar/',
         views.adicionar_ao_carrinho,
-        name = 'adicionar_carrinho'
+        name='adicionar_carrinho'
     ),
     path(
-        'carrinho/<int:pedido_id>/', 
-        views.ver_carrinho, 
+        'carrinho/<int:pedido_id>/',
+        views.ver_carrinho,
         name='ver_carrinho',
     ),
     path(
         'carrinho/<int:pedido_id>/aplicar-cupom/',
-        views.aplicar_cupom, 
+        views.aplicar_cupom,
         name='aplicar_cupom'
     ),
     path(
@@ -43,8 +44,34 @@ urlpatterns = [
         name='cancelar_pedido'
     ),
     path(
-        'produtos/cadastrar/', 
-        views.cadastrar_produto, 
+        'produtos/cadastrar/',
+        views.cadastrar_produto,
         name='cadastrar_produto'
+    ),
+
+    path(
+        'painel/produtos/',
+        views_painel.painel_produtos,
+        name='painel_produtos'
+    ),
+    path(
+        'painel/produtos/novo/',
+        views_painel.painel_novo_produto,
+        name='painel_novo_produto'
+    ),
+    path(
+        'painel/produtos/<int:produto_id>/editar/',
+        views_painel.painel_editar_produto,
+        name='painel_editar_produto'
+    ),
+    path(
+        'painel/pedidos/',
+        views_painel.painel_pedidos,
+        name='painel_pedidos'
+    ),
+    path(
+        'painel/pedidos/<int:pedido_id>/',
+        views_painel.painel_pedido,
+        name='painel_pedido'
     ),
 ]
