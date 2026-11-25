@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User     
 # Create your models here.
 class Cliente(models.Model):
     nome = models.CharField(max_length=100)
@@ -57,3 +57,17 @@ class Cupom(models.Model):
     
     def __str__(self):
         return self.codigo
+    
+class Perfil(models.Model):                       # <- novo, depois do Cupom
+    PAPEIS = [('admin', 'Administrador'), ('operador', 'Operador')]
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    vendedor = models.ForeignKey(Vendedor, on_delete=models.PROTECT)
+    papel = models.CharField(max_length=20, choices=PAPEIS, default='operador')
+
+    @property
+    def eh_admin(self):
+        return self.papel == 'admin'
+
+    def __str__(self):
+        return f'{self.usuario} - {self.vendedor}'
+    

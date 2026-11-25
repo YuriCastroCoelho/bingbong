@@ -4,6 +4,7 @@ from django.db.models import F
 from .models import Produto, Cliente, Pedido, Item, Cupom
 from datetime import date
 from django.contrib import messages
+from .forms import ProdutoForm
 
 # Create your views here.
 def lista_produtos(request):

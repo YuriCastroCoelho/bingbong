@@ -19,4 +19,7 @@ class ProdutoForm(forms.ModelForm):
             raise forms.ValidationError("Estoque Invalido Não pode ser negativo")
         return valor
     
+class ProdutoPainelForm(ProdutoForm):
 
+    class Meta(ProdutoForm.Meta):
+        fields = ['nome', 'estoque', 'preco', 'categoria']
