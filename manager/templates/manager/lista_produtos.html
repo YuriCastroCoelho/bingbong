@@ -7,6 +7,20 @@
     <p>estoque atual</p>
   </div>
 
+    <form method="get" class="filters">
+        <input type="text" name="q" placeholder="Buscando produto..." value="{{ termo_achar|default_if_none:'' }}">
+
+        <select name="categoria">
+            <option value="" {% if not categoria_filtro %}selected{% endif %}>Todas as categorias</option>
+            <option value="Teclado" {% if categoria_filtro == 'Teclado' %}selected{% endif %}>Teclado</option>
+            <option value="Mouse" {% if categoria_filtro == 'Mouse' %}selected{% endif %}>Mouse</option>
+            <option value="Fone de Ouvido" {% if categoria_filtro == 'Fone de Ouvido' %}selected{% endif %}>Fone de Ouvido</option>
+            <option value="Cooler" {% if categoria_filtro == 'Cooler' %}selected{% endif %}>Cooler</option>
+        </select>
+
+        <button type="submit">Buscar</button>
+    </form>
+
   <ul class="grid">
       {% for produto in produtos %}
           <li class="card">

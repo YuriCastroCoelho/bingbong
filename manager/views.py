@@ -4,16 +4,26 @@ from django.db.models import F
 from .models import Produto, Cliente, Pedido, Item, Cupom
 from datetime import date
 from django.contrib import messages
+
 # Create your views here.
 def lista_produtos(request):
     
     produtos = Produto.objects.all()
     
+    termo_achar = request.GET.get('q')
+    categoria_filtro = request.GET.get('categoria')
+
+    if termo_achar:
+        produtos = produtos.filter(nome__icontains=termo_achar)
+
+    if categoria_filtro:
+        produtos = produtos.filter(categoria=categoria_filtro)
+    
     
     return render(
-        request, 
-        'manager/lista_produtos.html',  
-        {'produtos': produtos}       
+        request,
+        'manager/lista_produtos.html',
+        {'produtos': produtos, 'termo_achar': termo_achar, 'categoria_filtro': categoria_filtro},
     )
     
 def ver_carrinho(request, pedido_id):
@@ -120,3 +130,13 @@ def cancelar_pedido(request, pedido_id):
 
     pedido.delete()
     return redirect('lista_produtos')
+
+def cadastrar_produto(request):
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_produtos')
+    else:
+        form = ProdutoForm()
+    return render(request, 'manager/cadastro_produto.html', {"form" : form})
