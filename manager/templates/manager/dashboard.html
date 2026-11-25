@@ -1,0 +1,52 @@
+<h1>Dashboard – {{ request.user.perfil.vendedor.marca }}</h1>
+
+<form method="get">
+  {{ form.inicio.label_tag }} {{ form.inicio }}
+  {{ form.fim.label_tag }} {{ form.fim }}
+  <button>Filtrar</button> <a href="{% url 'dashboard' %}">Limpar</a>
+</form>
+
+<div class="cards">
+  <div class="card"><small>Pedidos</small><strong>{{ kpis.pedidos }}</strong></div>
+  <div class="card"><small>Vendas brutas</small><strong>R$ {{ kpis.faturamento|floatformat:2 }}</strong></div>
+  <div class="card"><small>Ticket médio</small><strong>R$ {{ kpis.ticket_medio|floatformat:2 }}</strong></div>
+  <div class="card"><small>Unidades vendidas</small><strong>{{ kpis.unidades }}</strong></div>
+  <div class="card"><small>Pedidos com cupom</small><strong>{{ kpis.com_cupom }}</strong></div>
+</div>
+
+<h2>Produtos mais vendidos</h2>
+<table>
+  {% for r in ranking %}
+  <tr><td>{{ r.produto__nome }}</td><td>{{ r.qtd }} un.</td><td>R$ {{ r.receita|floatformat:2 }}</td></tr>
+  {% empty %}<tr><td>Sem dados no período.</td></tr>{% endfor %}
+</table>
+
+<h2>Pedidos por status</h2>
+<ul>
+  {% for s in por_status %}<li>{{ s.status }}: {{ s.pedidos }}</li>
+  {% empty %}<li>Sem dados.</li>{% endfor %}
+</ul>
+
+<h2>Estoque baixo (5 un. ou menos)</h2>
+<ul>
+  {% for p in estoque_baixo %}<li>{{ p.nome }}: {{ p.estoque }} un.</li>
+  {% empty %}<li>Nenhum produto com estoque baixo.</li>{% endfor %}
+</ul>
+
+{% if mostra_series %}
+  <h2>Vendas por mês</h2>
+  {{ por_mes|json_script:"dados-mes" }}
+  <canvas id="graf"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const dados = JSON.parse(document.getElementById('dados-mes').textContent);
+    new Chart(document.getElementById('graf'), {
+      type: 'bar',
+      data: {
+        labels: dados.map(d => d.mes),
+        datasets: [{ label: 'Vendas (R$)', data: dados.map(d => d.total) }]
+      }
+    });
+  </script>
+  <p><a href="{% url 'exportar_csv' %}?{{ request.GET.urlencode }}">Exportar CSV</a></p>
+{% endif %}

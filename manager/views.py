@@ -6,7 +6,7 @@ from datetime import date
 from django.contrib import messages
 from .forms import ProdutoForm
 
-# Create your views here.
+
 def lista_produtos(request):
     
     produtos = Produto.objects.all()
