@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
-from .models import Produto , Cliente, Pedido, Item, Cupom
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import transaction
+from django.db.models import F
+from .models import Produto, Cliente, Pedido, Item, Cupom
 from datetime import date
 from django.contrib import messages
-
 # Create your views here.
 def lista_produtos(request):
     
@@ -35,7 +36,15 @@ def ver_carrinho(request, pedido_id):
     
 def adicionar_ao_carrinho(request, produto_id):
     if request.method == 'POST':
-        produto = Produto.objects.get(id=produto_id)
+        produto = get_object_or_404(Produto, id=produto_id)
+
+        try:
+            quantidade = int(request.POST.get('quantidade'))
+        except (TypeError, ValueError):
+            quantidade = 0
+        if quantidade <= 0:
+            messages.error(request, 'Informe uma quantidade aceitável.')
+            return redirect('lista_produtos')
 
         valor_do_campo = request.POST.get('cliente_username')
         cliente, foi_criado = Cliente.objects.get_or_create(nome=valor_do_campo)
@@ -45,20 +54,25 @@ def adicionar_ao_carrinho(request, produto_id):
             status='carrinho'
         )
 
-        quantidade = int(request.POST.get('quantidade'))
+        with transaction.atomic():
+            baixou = Produto.objects.filter(
+                pk=produto.pk, estoque__gte=quantidade
+            ).update(estoque=F('estoque') - quantidade)
 
-        Item.objects.create(
-            pedido=pedido,
-            produto=produto,
-            quantidade=quantidade,
-            preco=produto.preco
-        )
+            if not baixou:
+                messages.error(request, 'Estoque insuficiente.')
+                return redirect('lista_produtos')
 
-        produto.estoque = produto.estoque - quantidade
-        produto.save()
+            Item.objects.create(
+                pedido=pedido,
+                produto=produto,
+                quantidade=quantidade,
+                preco=produto.preco
+            )
 
-        return redirect('ver_carrinho', pedido_id = pedido.id)
+        return redirect('ver_carrinho', pedido_id=pedido.id)
 
+    return redirect('lista_produtos')
 def aplicar_cupom(request, pedido_id):
     if request.method == 'POST':
         pedido = Pedido.objects.get(id=pedido_id)
@@ -92,7 +106,6 @@ def marcar_entregue(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     pedido.status = 'entregue'
     pedido.save()
-    pedido.delete()
     return redirect('lista_produtos')
 
 
