@@ -129,3 +129,11 @@ MAILERS = {
 
 LOGIN_REDIRECT_URL = '/painel/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
+
+INSTALLED_APPS += ['rest_framework']
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'manager.permissions.TemPerfil',     
+    ],
+}
